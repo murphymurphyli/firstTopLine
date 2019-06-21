@@ -1,21 +1,17 @@
 <template>
   <div>
-    <p>app Component</p>
+    <p>home Component</p>
   </div>
-
 </template>
 
 <script>
 export default {
-  name: 'App',
+  name: 'home',
   data () {
-    return {
-
-    }
+    return {}
   }
 }
 </script>
 
 <style lang="less">
-
 </style>

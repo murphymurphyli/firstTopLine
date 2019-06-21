@@ -1,18 +1,18 @@
 <template>
-  <div>
-    <p>app Component</p>
-  </div>
-
+    <div>
+        <p>login Component</p>
+    </div>
 </template>
 
 <script>
 export default {
-  name: 'App',
+  name: 'login',
   data () {
     return {
 
     }
   }
+
 }
 </script>
 
