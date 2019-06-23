@@ -1,6 +1,7 @@
 <template>
-  <div>
-    <p>app Component</p>
+  <div id='app'>
+    <!-- <p>App</p> -->
+    <router-view></router-view>
   </div>
 
 </template>
@@ -16,6 +17,6 @@ export default {
 }
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
 
 </style>
