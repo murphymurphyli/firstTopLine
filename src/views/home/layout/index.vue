@@ -1,9 +1,9 @@
 <template>
     <el-container>
-      <el-aside class="Aside" width="200px">Aside</el-aside>
+      <el-aside class="Aside" width="200px"><AppAside /></el-aside>
       <el-container>
-        <el-header class="Header">Header</el-header>
-        <el-main class="Main">Main</el-main>
+        <el-header class="Header"><AppHead /></el-header>
+        <el-main class="Main"><router-view /></el-main>
       </el-container>
     </el-container>
 </template>

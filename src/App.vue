@@ -20,6 +20,7 @@ export default {
 <style lang="less" scoped>
 #app {
   height: 100%;
+  background-color: pink;
 }
 
 </style>
