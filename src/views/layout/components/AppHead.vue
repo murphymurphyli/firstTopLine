@@ -19,6 +19,12 @@
 
 <script>
 export default {
+  name: 'AppHead',
+  data () {
+    return {
+
+    }
+  }
 
 }
 </script>

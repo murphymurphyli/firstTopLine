@@ -4,31 +4,29 @@ import Router from 'vue-router'
 Vue.use(Router)
 
 export default new Router({
-  routes: [
-    // {
-    //  //name: 'layout',
-    // path: '/',
-    // component: () => import('@/views/home/layout'),
-    // children: [
-    // {
-    // name: 'home',
-    // path: '',
-    // component: () => import('@/views/home')
-    // }
-    //
-    // ]
-    // },
-
-    {
+  routes: [{
+    // name: 'layout',
+    path: '/',
+    component: () => import('@/views/layout'),
+    children: [{
       name: 'home',
-      path: '/',
+      path: '',
       component: () => import('@/views/home')
-    },
-    {
-      name: 'login',
-      path: '/login',
-      component: () => import('@/views/login')
     }
+
+    ]
+  },
+
+  // {
+  //   name: 'home',
+  //   path: '/',
+  //   component: () => import('@/views/home')
+  // },
+  {
+    name: 'login',
+    path: '/login',
+    component: () => import('@/views/login')
+  }
 
   ]
 })

@@ -1,17 +1,21 @@
 <template>
  <div class="loginin">
-   <el-form ref="form" :model="form">
+   <el-form
+   ref="form"
+   :model="form"
+   :rules="rules"
+   >
       <el-form-item>
         <el-col :span="24">
           <img src="../../assets/logo_index.png" alt="">
         </el-col>
       </el-form-item>
-      <el-form-item>
+      <el-form-item prop="mobile">
         <el-col :span="24">
           <el-input v-model="form.mobile" placeholder="请输入手机号"></el-input>
         </el-col>
       </el-form-item>
-        <el-form-item>
+        <el-form-item prop="code">
           <el-col :span="13">
             <el-input v-model="form.code" placeholder="请输入验证码"></el-input>
           </el-col>
@@ -29,7 +33,7 @@
         </el-form-item>
         <el-form-item>
           <el-col :span="24">
-            <el-button class="loging" @click="onSubmit">登录</el-button>
+            <el-button class="loging" @click="handleLogin">登录</el-button>
           </el-col>
         </el-form-item>
   </el-form>
@@ -46,12 +50,55 @@ export default {
       form: {
         mobile: '',
         code: ''
+      },
+      rules: {
+        mobile:
+        [
+          { required: true, message: '请输入电话号码', trigger: 'blur' },
+          { pattern: /\d{11}/, message: '请输入有效的电话号码', trigger: 'blur' }
+        ],
+        code:
+        [
+          { required: true, message: '请输入验证码', trigger: 'blur' },
+          { pattern: /\d{6}/, message: '请输入有效的验证码', trigger: 'blur' }
+        ]
+
       }
     }
   },
   methods: {
-    onSubmit () {
-      console.log('submit!')
+
+    handleLogin () {
+      this.$refs['form'].validate(valid => {
+        if (!valid) {
+          return
+        }
+        this.submitLogin()
+      })
+    },
+    submitLogin () {
+      const { mobile, code } = this.form
+      axios({
+        method: 'POST',
+        url: 'http://ttapi.research.itcast.cn/mp/v1_0/authorizations',
+        data: this.form
+      }).then(res => {
+        console.log(res.data)
+        this.$message({
+          showClose: true,
+          message: '登陆成功了'
+        })
+      }).catch((e) => {
+        this.$message({
+          showClose: true,
+          message: '登录失败了',
+          type: 'error'
+        })
+      }).then(res => {
+        this.$router.push({
+          name: 'home'
+        })
+      })
     },
     handleSendCode () {
       // console.log('handleSendCode')
@@ -78,8 +125,22 @@ export default {
             captchaObj.verify()
           }).onSuccess(function () {
             // your code
-            console.log(captchaObj.getValidate())
-           
+            // console.log(captchaObj.getValidate())
+            const {
+              geetest_challenge: challenge,
+              eetest_validate: validate,
+              geetest_seccode: seccode } = captchaObj.getValidate()
+            axios({
+              method: 'GET',
+              url: `http://ttapi.research.itcast.cn/mp/v1_0/sms/codes/${mobile}`,
+              params: {
+                challenge: '',
+                validate: '',
+                seccode: ''
+              }
+            }).then(res => {
+              console.log(res.data)
+            })
           }).onError(function () {
             // your code
           })

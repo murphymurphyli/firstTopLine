@@ -1,16 +1,16 @@
 <template>
     <el-container>
-      <el-aside class="Aside" width="200px"><AppAside /></el-aside>
+      <el-aside class="Aside" width="200px"><AppAside></AppAside></el-aside>
       <el-container>
-        <el-header class="Header"><AppHead /></el-header>
+        <el-header class="Header"><AppHead></AppHead></el-header>
         <el-main class="Main"><router-view /></el-main>
       </el-container>
     </el-container>
 </template>
 
 <script>
-import AppAside from './components/AppAside.vue'
-import AppHead from './components/AppHead.vue'
+import AppAside from './components/AppAside'
+import AppHead from './components/AppHead'
 export default {
   name: 'AppLayout',
   components: {
