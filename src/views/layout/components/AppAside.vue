@@ -1,5 +1,5 @@
 <template>
-    <div id='app'>
+    <div>
 
         <el-col :span="24">
             <el-menu

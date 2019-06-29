@@ -1,5 +1,5 @@
 <template>
-    <div id='app'>
+    <div>
         <el-col :span="18">江苏传智播客教育科技股份有限公司</el-col>
          <el-col :span="2"></el-col>
         <el-col :span="4">
