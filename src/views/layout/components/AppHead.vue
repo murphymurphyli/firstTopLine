@@ -1,11 +1,12 @@
 <template>
     <div id='app'>
         <el-col :span="18">江苏传智播客教育科技股份有限公司</el-col>
-         <el-col :span="2"><img src=""></el-col>
+         <el-col :span="2"></el-col>
         <el-col :span="4">
             <el-dropdown>
+              <img width="30" :src="userInfo.photo">
               <span class="el-dropdown-link">
-                下拉菜单<i class="el-icon-arrow-down el-icon--right"></i>
+                {{  userInfo.name  }}<i class="el-icon-arrow-down el-icon--right"></i>
               </span>
               <el-dropdown-menu slot="dropdown">
                 <el-dropdown-item>个人信息</el-dropdown-item>
@@ -22,8 +23,11 @@ export default {
   name: 'AppHead',
   data () {
     return {
-
+      userInfo: {}
     }
+  },
+  created () {
+    this.userInfo = JSON.parse(window.localStorage.getItem('user_info'))
   }
 
 }
