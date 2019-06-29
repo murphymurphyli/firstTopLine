@@ -1,5 +1,6 @@
 <template>
   <div class="loginin">
+      <!-- async之前的函数 -->
     <el-form ref="form" :model="form" :rules="rules">
       <el-form-item>
         <el-col :span="24">
@@ -35,10 +36,9 @@
 </template>
 
 <script>
-// import axios from 'axios'
+import axios from 'axios'
 import '@/vendor/gt'
 import { saveUser } from '@/utils/auth'
-import initGeetest from '@/utils/init-geetest'
 export default {
   name: 'AppLogin',
   data () {
@@ -77,29 +77,35 @@ export default {
         this.submitLogin()
       })
     },
-    async submitLogin () {
-      try {
-        // const { mobile, code } = this.form
-        const res = await this.$http({
-          method: 'POST',
-          url: 'http://ttapi.research.itcast.cn/mp/v1_0/authorizations',
-          data: this.form
+    submitLogin () {
+      const { mobile, code } = this.form
+      axios({
+        method: 'POST',
+        url: 'http://ttapi.research.itcast.cn/mp/v1_0/authorizations',
+        data: this.form
+      })
+        .then(res => {
+          const userInfo = res.data.data
+          // window.localStorage.setItem('user_info', JSON.stringify(userInfo))
+          saveUser(userInfo)
+          console.log(res.data)
+          this.$message({
+            message: '登陆成功了',
+            type: 'success'
+          })
+          this.$router.push({
+            name: 'home'
+          })
         })
-      const userInfo = res.data.data
-      // window.localStorage.setItem('user_info', JSON.stringify(userInfo))
-      saveUser(userInfo)
-      console.log(res.data)
-      this.$message({
-        message: '登陆成功了',
-        type: 'success'
-      })
-      this.$router.push({
-        name: 'home'
-      })
-    } catch (err) {
-        this.$message.error('登录失败，手机号或者验证码错误')
-    } 
-  },
+        .catch((e) => {
+          this.$message.error('登录失败，手机号或者验证码错误')
+        })
+        // .then(res => {
+        //   this.$router.push({
+        //     name: 'home'
+        //   })
+        // })
+    },
     handleSendCode () {
       // console.log('handleSendCode')
       this.$refs['form'].validateField('mobile', errorMessage => {
@@ -109,14 +115,16 @@ export default {
         this.showGeetest()
       })
     },
-    async showGeetest () {
+    showGeetest () {
       const { mobile } = this.form
-      const res = await this.$http({
+      axios({
         method: 'GET',
-        url: `/captchas/${mobile}`
-      })
+        url: `http://ttapi.research.itcast.cn/mp/v1_0/captchas/${mobile}`
+      }).then(res => {
+        // console.log(res.data)
+        // const data = res.data.data
         const { data } = res.data
-        const captchaObj = await initGeetest(
+        window.initGeetest(
           {
             // 以下配置参数来自服务端 SDK
             gt: data.gt,
@@ -124,7 +132,9 @@ export default {
             offline: !data.success,
             new_captcha: data.new_captcha,
             product: 'bind'
-          })
+          },
+
+          function (captchaObj) {
             // 这里可以调用验证实例 captchaObj 的实例方法
             // console.log(captchaObj)
             captchaObj
@@ -132,22 +142,32 @@ export default {
                 // 验证码ready之后才能调用verify方法显示验证码
                 captchaObj.verify()
               })
-              .onSuccess(async function () {
+              .onSuccess(function () {
+                // your code
+                // console.log(captchaObj.getValidate())
                 const {
                   geetest_challenge: challenge,
                   eetest_validate: validate,
                   geetest_seccode: seccode
                 } = captchaObj.getValidate()
-                await this.$http({
+                axios({
                   method: 'GET',
-                  url: `/sms/codes/${mobile}`,
+                  url: `http://ttapi.research.itcast.cn/mp/v1_0/sms/codes/${mobile}`,
                   params: {
-                    challenge,
-                    validate,
-                    seccode
+                    challenge: '',
+                    validate: '',
+                    seccode: ''
                   }
-                })                 
+                }).then(res => {
+                  console.log(res.data)
+                })
               })
+              .onError(function () {
+                // your code
+              })
+          }
+        )
+      })
     }
   }
 }
