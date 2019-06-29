@@ -84,11 +84,11 @@ export default {
       })
         .then(res => {
           const userInfo = res.data.data
-          window.localStorage.setItem('user_info',JSON.stringify(userInfo))
+          window.localStorage.setItem('user_info', JSON.stringify(userInfo))
           console.log(res.data)
           this.$message({
             message: '登陆成功了',
-            type:'success'
+            type: 'success'
           })
           this.$router.push({
             name: 'home'
