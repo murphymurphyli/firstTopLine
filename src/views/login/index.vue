@@ -37,6 +37,7 @@
 <script>
 import axios from 'axios'
 import '@/vendor/gt'
+import { saveUser } from '@/utils/auth'
 export default {
   name: 'AppLogin',
   data () {
@@ -84,7 +85,8 @@ export default {
       })
         .then(res => {
           const userInfo = res.data.data
-          window.localStorage.setItem('user_info', JSON.stringify(userInfo))
+          // window.localStorage.setItem('user_info', JSON.stringify(userInfo))
+          saveUser(userInfo)
           console.log(res.data)
           this.$message({
             message: '登陆成功了',
