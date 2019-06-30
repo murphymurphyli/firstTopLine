@@ -43,8 +43,9 @@ export default {
         // window.localStorage.removeItem('user_info')
         removeUser()
 
-        // 跳转到登录页
         this.$router.push({ name: 'login' })
+        console.log(111)
+        // 跳转到登录页
 
         this.$message({
           type: 'success',

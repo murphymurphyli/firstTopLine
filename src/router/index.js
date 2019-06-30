@@ -26,7 +26,13 @@ const router = new Router({
           name: 'home',
           path: '', // 父路由的默认内容
           component: () => import('@/views/home')
-        }]
+        },
+        {
+          name: 'article',
+          path: '/article', // 父路由的默认内容
+          component: () => import('@/views/article')
+        }
+      ]
     },
     {
       name: 'login',

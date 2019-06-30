@@ -8,5 +8,5 @@ export function saveUser (data) {
   localStorage.setItem(USER_KEY, JSON.stringify(data))
 }
 export function removeUser () {
-  localStorage.remoeveItem(USER_KEY)
+  localStorage.removeItem(USER_KEY)
 }

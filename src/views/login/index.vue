@@ -85,21 +85,21 @@ export default {
           url: 'http://ttapi.research.itcast.cn/mp/v1_0/authorizations',
           data: this.form
         })
-      const userInfo = res.data.data
-      // window.localStorage.setItem('user_info', JSON.stringify(userInfo))
-      saveUser(userInfo)
-      console.log(res.data)
-      this.$message({
-        message: '登陆成功了',
-        type: 'success'
-      })
-      this.$router.push({
-        name: 'home'
-      })
-    } catch (err) {
+        const userInfo = res.data.data
+        // window.localStorage.setItem('user_info', JSON.stringify(userInfo))
+        saveUser(userInfo)
+        console.log(res.data)
+        this.$message({
+          message: '登陆成功了',
+          type: 'success'
+        })
+        this.$router.push({
+          name: 'home'
+        })
+      } catch (err) {
         this.$message.error('登录失败，手机号或者验证码错误')
-    } 
-  },
+      }
+    },
     handleSendCode () {
       // console.log('handleSendCode')
       this.$refs['form'].validateField('mobile', errorMessage => {
@@ -115,39 +115,39 @@ export default {
         method: 'GET',
         url: `/captchas/${mobile}`
       })
-        const { data } = res.data
-        const captchaObj = await initGeetest(
-          {
-            // 以下配置参数来自服务端 SDK
-            gt: data.gt,
-            challenge: data.challenge,
-            offline: !data.success,
-            new_captcha: data.new_captcha,
-            product: 'bind'
+      const { data } = res.data
+      const captchaObj = await initGeetest(
+        {
+          // 以下配置参数来自服务端 SDK
+          gt: data.gt,
+          challenge: data.challenge,
+          offline: !data.success,
+          new_captcha: data.new_captcha,
+          product: 'bind'
+        })
+      // 这里可以调用验证实例 captchaObj 的实例方法
+      // console.log(captchaObj)
+      captchaObj
+        .onReady(function () {
+          // 验证码ready之后才能调用verify方法显示验证码
+          captchaObj.verify()
+        })
+        .onSuccess(async function () {
+          const {
+            geetest_challenge: challenge,
+            eetest_validate: validate,
+            geetest_seccode: seccode
+          } = captchaObj.getValidate()
+          await this.$http({
+            method: 'GET',
+            url: `/sms/codes/${mobile}`,
+            params: {
+              challenge,
+              validate,
+              seccode
+            }
           })
-            // 这里可以调用验证实例 captchaObj 的实例方法
-            // console.log(captchaObj)
-            captchaObj
-              .onReady(function () {
-                // 验证码ready之后才能调用verify方法显示验证码
-                captchaObj.verify()
-              })
-              .onSuccess(async function () {
-                const {
-                  geetest_challenge: challenge,
-                  eetest_validate: validate,
-                  geetest_seccode: seccode
-                } = captchaObj.getValidate()
-                await this.$http({
-                  method: 'GET',
-                  url: `/sms/codes/${mobile}`,
-                  params: {
-                    challenge,
-                    validate,
-                    seccode
-                  }
-                })                 
-              })
+        })
     }
   }
 }
